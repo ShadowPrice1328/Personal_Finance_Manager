@@ -1,0 +1,4 @@
+﻿.text-done {
+    --bs-text-opacity: 1;
+    color: limegreen;
+}

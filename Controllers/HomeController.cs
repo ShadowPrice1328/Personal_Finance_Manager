@@ -8,33 +8,38 @@ namespace Personal_Finance_Manager.Controllers
 	public class HomeController : Controller
 	{
 		private readonly ILogger<HomeController> _logger;
+        private readonly AppDbContext _appDbContext;
 
-		public HomeController(ILogger<HomeController> logger)
+		public HomeController(ILogger<HomeController> logger, AppDbContext appDbContext)
 		{
+            _appDbContext = appDbContext;
 			_logger = logger;
 		}
 
 		public IActionResult Index()
 		{
-            //try
-            //{
-            //    _dbContext.Database.OpenConnection();
-            //    var isConnected = _dbContext.Database.CanConnect();
-            //    _dbContext.Database.CloseConnection();
+            try
+            {
+                _appDbContext.Database.OpenConnection();
+                var isConnected = _appDbContext.Database.CanConnect();
+                _appDbContext.Database.CloseConnection();
 
-            //    if (isConnected)
-            //    {
-            //        ViewBag.ConnectionStatus = "Підключено до бази даних";
-            //    }
-            //    else
-            //    {
-            //        ViewBag.ConnectionStatus = "Не вдалося підключитись до бази даних";
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    ViewBag.ConnectionStatus = "Помилка при підключенні до бази даних: " + ex.Message;
-            //}
+                if (isConnected)
+                {
+                    ViewBag.ConnectionStatus = $"Connected to [{_appDbContext.Database.GetDbConnection().Database}] database!";
+                    ViewBag.ConnectionStatusColor = "text-done";
+                }
+                else
+                {
+                    ViewBag.ConnectionStatus = "Not Connected!";
+                    ViewBag.ConnectionStatusColor = "text-warning";
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.ConnectionStatus = "Connection error: " + ex.Message;
+                ViewBag.ConnectionStatusColor = "text-danger";
+            }
 
             return View();
 		}
