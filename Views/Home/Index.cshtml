@@ -4,5 +4,9 @@
 
 <div class="text-center">
     <h1 class="display-5">Welcome to PFM</h1>
-    <p>Database connection status: <span class="@ViewBag.ConnectionStatusColor">@ViewBag.ConnectionStatus</span></p>
+    <p>Database connection status: <span class="@ViewBag.ConnectionStatusColor">@ViewBag.ConnectionStatus </span> </p>
+    @if (ViewBag.ConnectionStatus == "Connection error!")
+    {
+        <p><span class="@ViewBag.ConnectionStatusColor"> @ViewBag.Desc</span></p>
+    }
 </div>

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using MySql.Data.MySqlClient;
 using Personal_Finance_Manager.Models;
 using System.Diagnostics;
 
@@ -16,35 +17,39 @@ namespace Personal_Finance_Manager.Controllers
 			_logger = logger;
 		}
 
-		public IActionResult Index()
-		{
+        public IActionResult Index()
+        {
             try
             {
-                _appDbContext.Database.OpenConnection();
-                var isConnected = _appDbContext.Database.CanConnect();
-                _appDbContext.Database.CloseConnection();
+                using (_appDbContext.Database.GetDbConnection())
+                {
+                    _appDbContext.Database.OpenConnection();
+                    var isConnected = _appDbContext.Database.CanConnect();
+                    _appDbContext.Database.CloseConnection();
 
-                if (isConnected)
-                {
-                    ViewBag.ConnectionStatus = $"Connected to [{_appDbContext.Database.GetDbConnection().Database}] database!";
-                    ViewBag.ConnectionStatusColor = "text-done";
-                }
-                else
-                {
-                    ViewBag.ConnectionStatus = "Not Connected!";
-                    ViewBag.ConnectionStatusColor = "text-warning";
+                    if (isConnected)
+                    {
+                        ViewBag.ConnectionStatus = $"Connected to [{_appDbContext.Database.GetDbConnection().Database}] database!";
+                        ViewBag.ConnectionStatusColor = "text-done";
+                    }
+                    else
+                    {
+                        ViewBag.ConnectionStatus = "Not Connected!";
+                        ViewBag.ConnectionStatusColor = "text-warning";
+                    }
                 }
             }
             catch (Exception ex)
             {
-                ViewBag.ConnectionStatus = "Connection error: " + ex.Message;
+                ViewBag.ConnectionStatus = "Connection error!";
+                ViewBag.Desc = ex.Message;
                 ViewBag.ConnectionStatusColor = "text-danger";
             }
 
             return View();
-		}
+        }
 
-		public IActionResult Categories()
+        public IActionResult Categories()
 		{
 			return View();
 		}
