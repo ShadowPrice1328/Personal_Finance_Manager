@@ -1,7 +1,31 @@
-﻿@{
+﻿@model CategoriesViewModel;
+
+@{
     ViewData["Title"] = "Categories";
 }
 
-<div class="container-fluid">
+<div class="container">
     <h2>Category list:</h2>
+
+    <table class="table table-bordered mt-4">
+        <thead>
+            <tr>
+                @foreach (var property in Model.Categories.FirstOrDefault()?.GetType().GetProperties())
+                {
+                    <th>@property.Name</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var category in Model.Categories)
+            {
+                <tr>
+                    @foreach (var property in category.GetType().GetProperties())
+                    {
+                        <td>@property.GetValue(category)</td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>

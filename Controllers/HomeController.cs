@@ -49,15 +49,6 @@ namespace Personal_Finance_Manager.Controllers
             return View();
         }
 
-        public IActionResult Transactions()
-        {
-            return View();
-        }
-        public IActionResult Reports()
-        {
-            return View();
-        }
-
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
 		public IActionResult Error()
 		{
