@@ -49,11 +49,6 @@ namespace Personal_Finance_Manager.Controllers
             return View();
         }
 
-        public IActionResult Categories()
-		{
-			return View();
-		}
-
         public IActionResult Transactions()
         {
             return View();
