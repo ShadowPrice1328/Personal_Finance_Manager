@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Personal_Finance_Manager.Models;
+using System.Xml.Linq;
 
 namespace Personal_Finance_Manager.Controllers
 {
@@ -30,11 +31,13 @@ namespace Personal_Finance_Manager.Controllers
             return View();
         }
         [HttpGet]
-        public ActionResult Edit(int Id)
+        [Route("Categories/Edit/{name}")]
+        public ActionResult Edit(string name)
         {
-            var data = _appDbContext.Categories.Where(x => x.Id == Id).FirstOrDefault();
+            var data = _appDbContext.Categories.FirstOrDefault(x => x.Name == name);
             return View(data);
         }
+
         [HttpPost]
         public ActionResult Edit(Category model)
         {
