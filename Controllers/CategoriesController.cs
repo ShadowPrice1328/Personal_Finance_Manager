@@ -24,12 +24,19 @@ namespace Personal_Finance_Manager.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult Create(Category model) 
+        public ActionResult Create(Category model)
         {
-            _appDbContext.Categories.Add(model);
-            _appDbContext.SaveChanges();
+            if (ModelState.IsValid)
+            {
+                _appDbContext.Categories.Add(model);
+                _appDbContext.SaveChanges();
+                ViewBag.Message = "Category has been created!";
+
+                return RedirectToAction("Index");
+            }
             return View();
         }
+
         [HttpGet]
         public ActionResult Edit(int Id)
         {
