@@ -31,10 +31,9 @@ namespace Personal_Finance_Manager.Controllers
             return View();
         }
         [HttpGet]
-        [Route("Categories/Edit/{name}")]
-        public ActionResult Edit(string name)
+        public ActionResult Edit(int Id)
         {
-            var data = _appDbContext.Categories.FirstOrDefault(x => x.Name == name);
+            var data = _appDbContext.Categories.FirstOrDefault(x => x.Id == Id);
             return View(data);
         }
 
@@ -50,7 +49,7 @@ namespace Personal_Finance_Manager.Controllers
             }
             return RedirectToAction("Index");
         }
-        public ActionResult Detail(int Id)
+        public ActionResult Details(int Id)
         {
             var data = _appDbContext.Categories.Where(x => x.Id == Id).FirstOrDefault();
             return View(data);
