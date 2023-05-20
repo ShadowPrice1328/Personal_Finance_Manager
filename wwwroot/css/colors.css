@@ -2,3 +2,13 @@
     --bs-text-opacity: 1;
     color: limegreen;
 }
+
+.btn-custom {
+    background-color: white;
+    border-color: black;
+}
+
+.btn-custom:hover {
+    background-color: black;
+    color: white;
+}
