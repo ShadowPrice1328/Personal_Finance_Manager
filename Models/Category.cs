@@ -1,12 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace Personal_Finance_Manager.Models
+﻿namespace Personal_Finance_Manager.Models
 {
     public class Category
     {
-        [Key]
-        public int Id_category { get; set; }
-        public string? Name { get; set; }
-        public string? Description { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
     }
 }
