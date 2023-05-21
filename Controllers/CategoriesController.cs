@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Personal_Finance_Manager.Models;
 using System.Xml.Linq;
 
@@ -16,6 +17,28 @@ namespace Personal_Finance_Manager.Controllers
         {
             var allCategories = _appDbContext.Categories.ToList();
             return View(allCategories);
+        }
+        public IActionResult Search(string cName)
+        {
+            if (!string.IsNullOrEmpty(cName))
+            {
+                cName = cName.Trim().ToLower();
+
+                var searchResults = _appDbContext.Categories
+                    .Where(c => c.Name.ToLower().StartsWith(cName))
+                    .ToList();
+
+                if (searchResults.Count != 0)
+                {
+                    return View("Index", searchResults);
+                }
+                else
+                {
+                    TempData["Message"] = "Nothing found!";
+                }
+            }
+
+            return RedirectToAction("Index");
         }
 
         [HttpGet]
