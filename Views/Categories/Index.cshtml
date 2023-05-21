@@ -6,6 +6,18 @@
 
 <h2>Category list:</h2>
 
+<div class="row flex-nowrap">
+    <div class="col-md-4">
+        <form asp-action="Search">
+            <div class="form-group d-flex">
+                <input type="text" name="cName" class="form-control mr-2" placeholder="Enter a name of category..." />
+                <div style="width: 8px;"></div>
+                <button type="submit" class="btn btn-primary">Search</button>
+            </div>
+        </form>
+    </div>
+</div>
+
 <div>
     <table class="table">
         <thead>
