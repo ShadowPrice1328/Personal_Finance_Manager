@@ -30,6 +30,7 @@ namespace Personal_Finance_Manager.Controllers
 
                 if (searchResults.Count != 0)
                 {
+                    TempData["AfterSearch"] = true;
                     return View("Index", searchResults);
                 }
                 else
@@ -53,7 +54,6 @@ namespace Personal_Finance_Manager.Controllers
             {
                 _appDbContext.Categories.Add(model);
                 _appDbContext.SaveChanges();
-                ViewBag.Message = "Category has been created!";
 
                 return RedirectToAction("Index");
             }

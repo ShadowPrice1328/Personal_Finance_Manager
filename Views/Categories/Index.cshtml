@@ -59,5 +59,9 @@
 
     <p>
         <a asp-action="Create" class="btn btn-success">Create New</a>
+        @if ((TempData["AfterSearch"] as bool?) == true)
+        {
+            <a asp-action="Index" class="btn btn-custom">Back to List</a>
+        }
     </p>
 </div>
