@@ -1,0 +1,29 @@
+﻿.text-done {
+    --bs-text-opacity: 1;
+    color: limegreen;
+}
+
+.btn-custom {
+    background-color: white;
+    border-color: black;
+}
+
+.btn-custom:hover {
+    background-color: black;
+    color: white;
+}
+.select-wrapper {
+    position: relative;
+}
+
+    .select-wrapper select {
+        width: 100%;
+    }
+
+.arrow-down {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    pointer-events: none;
+}

@@ -2,7 +2,7 @@
 {
     public enum TransactionType
     {
-        Expenses,
-        Revenues
+        E,
+        R
     }
 }
