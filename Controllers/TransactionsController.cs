@@ -44,5 +44,28 @@ namespace Personal_Finance_Manager.Controllers
             }
             return View(model);
         }
+        [HttpGet]
+        public ActionResult Edit(int Id)
+        {
+            var data = _appDbContext.Transactions.FirstOrDefault(x => x.Id == Id);
+            return View(data);
+        }
+
+        [HttpPost]
+        public ActionResult Edit(Transaction model)
+        {
+            var data = _appDbContext.Transactions.Where(x => x.Id == model.Id).FirstOrDefault();
+            if (data != null)
+            {
+                data.Category = model.Category;
+                data.Type = model.Type;
+                data.Cost = model.Cost;
+                data.Date = model.Date;
+                data.Description = model.Description;
+
+                _appDbContext.SaveChanges();
+            }
+            return RedirectToAction("Index");
+        }
     }
 }
