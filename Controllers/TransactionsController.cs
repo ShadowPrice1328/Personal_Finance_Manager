@@ -52,7 +52,7 @@ namespace Personal_Finance_Manager.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(Transaction model)
+        public IActionResult Edit(Transaction model)
         {
             var data = _appDbContext.Transactions.Where(x => x.Id == model.Id).FirstOrDefault();
             if (data != null)
@@ -65,6 +65,25 @@ namespace Personal_Finance_Manager.Controllers
 
                 _appDbContext.SaveChanges();
             }
+            return RedirectToAction("Index");
+        }
+        public IActionResult Details(int Id)
+        {
+            var data = _appDbContext.Transactions.Where(x => x.Id == Id).FirstOrDefault();
+            return View(data);
+        }
+        [HttpGet]
+        public IActionResult Delete(int Id)
+        {
+            Transaction? model = _appDbContext.Transactions.Where(x => x.Id == Id).FirstOrDefault();
+            return View(model);
+        }
+        [HttpPost]
+        public IActionResult Delete(Transaction model)
+        {
+            _appDbContext.Transactions.Remove(model);
+            _appDbContext.SaveChanges();
+
             return RedirectToAction("Index");
         }
     }

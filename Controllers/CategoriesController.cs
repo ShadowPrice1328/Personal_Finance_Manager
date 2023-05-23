@@ -84,11 +84,18 @@ namespace Personal_Finance_Manager.Controllers
             var data = _appDbContext.Categories.Where(x => x.Id == Id).FirstOrDefault();
             return View(data);
         }
+        [HttpGet]
         public ActionResult Delete(int Id)
         {
-            var data = _appDbContext.Categories.Where(x =>x.Id == Id).FirstOrDefault();
-            _appDbContext.Categories.Remove(data);
+            Category? model = _appDbContext.Categories.Where(x => x.Id == Id).FirstOrDefault();
+            return View(model);
+        }
+        [HttpPost]
+        public ActionResult Delete(Category model)
+        {
+            _appDbContext.Categories.Remove(model);
             _appDbContext.SaveChanges();
+
             return RedirectToAction("Index");
         }
     }
