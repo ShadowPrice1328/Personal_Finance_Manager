@@ -1,8 +1,8 @@
-﻿@model Personal_Finance_Manager.Models.Transaction
+﻿@inject Personal_Finance_Manager.Models.AppDbContext _appDbContext
+@model Personal_Finance_Manager.Models.Transaction
 
 @{
     ViewData["Title"] = "Add Transaction";
-    var categories = ViewData["Categories"] as List<Category>;
 }
 
 <h1>Add new Transaction:</h1>
@@ -15,7 +15,7 @@
                 <label asp-for="Category" class="control-label"></label>
                 <div class="select-wrapper">
                     <select asp-for="Category" class="form-control">
-                        @foreach (var category in categories)
+                        @foreach (var category in _appDbContext.Categories.ToList())
                         {
                             <option value="@category.Name">@category.Name</option>
                         }
@@ -28,8 +28,8 @@
                 <label asp-for="Type" class="control-label"></label>
                 <div class="select-wrapper">
                     <select asp-for="Type" class="form-control">
-                        <option value="E" selected>Expense</option>
-                        <option value="R">Revenue</option>
+                        <option value=@false selected>Expense</option>
+                        <option value=@true>Revenue</option>
                     </select>
                     <span class="arrow-down">&#9660;</span>
                 </div>
