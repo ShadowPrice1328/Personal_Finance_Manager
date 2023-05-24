@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Personal_Finance_Manager.Models
@@ -7,8 +8,15 @@ namespace Personal_Finance_Manager.Models
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
-            // Ensure the database is created
-            Database.EnsureCreated();
+            try
+            {
+                Database.EnsureCreated();
+                // Ensure the database is created
+            }
+            catch (Exception ex)
+            {
+                return;
+            }
         }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
