@@ -86,5 +86,18 @@ namespace Personal_Finance_Manager.Controllers
 
             return RedirectToAction("Index");
         }
+        public IActionResult Filter(string tCategory)
+        {
+            if (tCategory == "Select Category")
+            {
+                return RedirectToAction("Index");
+            }
+
+            var filteredTransactions = _appDbContext.Transactions
+                .Where(t => t.Category == tCategory)
+                .ToList();
+
+            return View("Index", filteredTransactions);
+        }
     }
 }

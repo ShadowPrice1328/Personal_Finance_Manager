@@ -1,10 +1,46 @@
-﻿@model IEnumerable<Personal_Finance_Manager.Models.Transaction>
+﻿@inject Personal_Finance_Manager.Models.AppDbContext _appDbContext
+@model IEnumerable<Personal_Finance_Manager.Models.Transaction>
 
 @{
     ViewData["Title"] = "Transactions";
+
+    var transactionCategories = _appDbContext.Transactions.Select(t => t.Category).ToList();
+    var categoryNames = _appDbContext.Categories.Select(c => c.Name).ToList();
+    var everyCategory = categoryNames.Concat(transactionCategories).Distinct().ToList();
 }
 
 <h2>Transaction list:</h2>
+
+<div class="row flex-nowrap">
+    <div class="col-md-4">
+        <div class="form-group">
+            <form asp-action="Filter">
+                <div class="select-wrapper">
+                    @if (everyCategory.Any())
+                    {
+                        <select class="form-control" name="tCategory" placeholder="Select Category" onchange="this.form.submit()">
+                            <option value="" disabled selected hidden>Select Category</option>
+                            @foreach (var category in everyCategory)
+                            {
+                                <option value="@category">@category</option>
+                            }
+                        </select>
+                        <noscript>
+                            <input type="submit" value="Submit">
+                        </noscript>
+                    }
+                    else
+                    {
+                        <select class="form-control" disabled>
+                            <option value="">No categories available</option>
+                        </select>
+                    }
+                    <span class="arrow-down">&#9660;</span>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 <table class="table">
     <thead>
