@@ -24,6 +24,8 @@ namespace Personal_Finance_Manager.Controllers
         {
             return View();
         }
+
+        [HttpPost]
         public IActionResult Generate(ReportViewModel model)
         {
             bool isCategoryChosen = !string.IsNullOrEmpty(model.Category);
@@ -37,24 +39,18 @@ namespace Personal_Finance_Manager.Controllers
                 return View("TableWithoutCategory", model);
             }
         }
+        [HttpPost]
         public IActionResult DayByDay(ReportViewModel model)
         {
-            if (ModelState.IsValid)
-            {
-                bool isCategoryChosen = !string.IsNullOrEmpty(model.Category);
+            bool isCategoryChosen = !string.IsNullOrEmpty(model.Category);
 
-                if (isCategoryChosen)
-                {
-                    return View("GraphWithCategory", model);
-                }
-                else
-                {
-                    return View("GraphWithoutCategory", model);
-                }
+            if (isCategoryChosen)
+            {
+                return View("GraphWithCategory", model);
             }
             else
             {
-                return View("Reports");
+                return View("GraphWithoutCategory", model);
             }
         }
     }

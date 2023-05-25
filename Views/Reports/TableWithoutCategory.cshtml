@@ -1,4 +1,5 @@
-﻿@model ReportViewModel
+﻿@inject Personal_Finance_Manager.Models.AppDbContext _appDbContext
+@model ReportViewModel
 
 @{
     ViewData["Title"] = "Report";
@@ -6,3 +7,7 @@
 
 <h2>Report from @Model.firstDate.ToString("yyyy-MM-dd") to @Model.lastDate.ToString("yyyy-MM-dd")</h2>
 <hr />
+
+<div>
+
+</div>

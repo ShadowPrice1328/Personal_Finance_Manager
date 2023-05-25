@@ -9,16 +9,16 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form autocomplete="off" method="post">
+        <form asp-action="Generate" autocomplete="off" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="firstDate" class="control-label">From</label>
-                <input asp-for="firstDate" type="date" max="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" required/>
+                <input asp-for="firstDate" type="date" max="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" required />
                 <span asp-validation-for="firstDate" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="lastDate" class="control-label">To</label>
-                <input asp-for="lastDate" type="date" max="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" required/>
+                <input asp-for="lastDate" type="date" max="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" required />
                 <span asp-validation-for="lastDate" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -56,8 +56,8 @@
                 </div>
             </div>
             <div class="form-group mt-3">
-                <input type="submit" value="Generate" class="btn btn-primary" formaction="/Reports/Generate"/>
-                <input type="submit" value="Day-by-Day" class="btn btn-success" formaction="/Reports/DayByDay"/>
+                <input type="submit" value="Generate" class="btn btn-primary" />
+                <a href="/DayByDay" class="btn btn-success">Day-by-Day</a>
             </div>
         </form>
     </div>
