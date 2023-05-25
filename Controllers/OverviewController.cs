@@ -6,6 +6,11 @@ namespace Personal_Finance_Manager.Controllers
 {
     public class OverviewController : Controller
     {
+        private readonly AppDbContext _appDbContext;
+        public OverviewController(AppDbContext appDbContext)
+        {
+            _appDbContext = appDbContext;
+        }
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             if (!_appDbContext.Database.CanConnect())

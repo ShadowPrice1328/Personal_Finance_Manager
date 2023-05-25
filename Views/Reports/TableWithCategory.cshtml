@@ -1,0 +1,8 @@
+﻿@model ReportViewModel
+
+@{
+    ViewData["Title"] = "Report for " + Model.firstDate + "-" + Model.lastDate;  
+}
+
+<h2>Report in the "@Model.Category" category from @Model.firstDate.ToString("yyyy-MM-dd") to @Model.lastDate.ToString("yyyy-MM-dd")</h2>
+<hr />
