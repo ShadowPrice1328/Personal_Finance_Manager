@@ -1,16 +1,27 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
 using Personal_Finance_Manager.Models;
-using System.Xml.Linq;
 
 namespace Personal_Finance_Manager.Controllers
 {
     public class CategoriesController : Controller
     {
         private readonly AppDbContext _appDbContext;
+
         public CategoriesController(AppDbContext appDbContext)
         {
             _appDbContext = appDbContext;
+        }
+
+        public override void OnActionExecuting(ActionExecutingContext context)
+        {
+            if (!_appDbContext.Database.CanConnect())
+            {
+                context.Result = RedirectToAction("Index", "Home");
+            }
+
+            base.OnActionExecuting(context);
         }
 
         public IActionResult Index()
@@ -18,6 +29,7 @@ namespace Personal_Finance_Manager.Controllers
             var allCategories = _appDbContext.Categories.ToList();
             return View(allCategories);
         }
+
         public IActionResult Search(string cName)
         {
             if (!string.IsNullOrEmpty(cName))
@@ -47,6 +59,7 @@ namespace Personal_Finance_Manager.Controllers
         {
             return View();
         }
+
         [HttpPost]
         public ActionResult Create(Category model)
         {
@@ -57,6 +70,7 @@ namespace Personal_Finance_Manager.Controllers
 
                 return RedirectToAction("Index");
             }
+
             return View();
         }
 
@@ -70,26 +84,30 @@ namespace Personal_Finance_Manager.Controllers
         [HttpPost]
         public ActionResult Edit(Category model)
         {
-            var data = _appDbContext.Categories.Where(x => x.Id == model.Id).FirstOrDefault();
+            var data = _appDbContext.Categories.FirstOrDefault(x => x.Id == model.Id);
             if (data != null)
             {
                 data.Name = model.Name;
                 data.Description = model.Description;
                 _appDbContext.SaveChanges();
             }
+
             return RedirectToAction("Index");
         }
+
         public ActionResult Details(int Id)
         {
-            var data = _appDbContext.Categories.Where(x => x.Id == Id).FirstOrDefault();
+            var data = _appDbContext.Categories.FirstOrDefault(x => x.Id == Id);
             return View(data);
         }
+
         [HttpGet]
         public ActionResult Delete(int Id)
         {
-            Category? model = _appDbContext.Categories.Where(x => x.Id == Id).FirstOrDefault();
+            var model = _appDbContext.Categories.FirstOrDefault(x => x.Id == Id);
             return View(model);
         }
+
         [HttpPost]
         public ActionResult Delete(Category model)
         {

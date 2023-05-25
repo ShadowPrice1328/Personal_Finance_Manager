@@ -31,6 +31,8 @@ namespace Personal_Finance_Manager.Controllers
                     {
                         ViewBag.ConnectionStatus = $"Connected to [{_appDbContext.Database.GetDbConnection().Database}] database!";
                         ViewBag.ConnectionStatusColor = "text-done";
+
+                        return View(_appDbContext);
                     }
                     else
                     {

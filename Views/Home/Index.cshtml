@@ -1,12 +1,31 @@
-﻿@{
+﻿@model Personal_Finance_Manager.Models.AppDbContext
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-5">Welcome to PFM</h1>
-    <p>Database connection status: <span class="@ViewBag.ConnectionStatusColor">@ViewBag.ConnectionStatus </span> </p>
+<div class="container text-center mt-5">
+    <div class="bg-light rounded p-3">
+        <h1 class="display-4 text-black">Welcome to PFM</h1>
+        <p class="text-black">Database connection status: <span class="@ViewBag.ConnectionStatusColor">@ViewBag.ConnectionStatus</span></p>
+    </div>
     @if (ViewBag.ConnectionStatus == "Connection error!")
     {
-        <p><span class="@ViewBag.ConnectionStatusColor"> @ViewBag.Desc</span></p>
+        <p class="mt-4"><span class="@ViewBag.ConnectionStatusColor"> @ViewBag.Desc</span></p>
+    }
+    else
+    {
+        <div class="row justify-content-center mt-4">
+            <div class="col-md-8">
+                <h2 class="mb-4">Your database contains info about <span class="text-primary">@Model.Categories.Count()</span> categories:</h2>
+
+                @foreach (var category in Model.Categories.ToList())
+                {
+                    <p class="mb-1" style="font-size: 18px;">@category.Name</p>
+                }
+
+                <h2 class="mt-4">And <span class="text-primary">@Model.Transactions.Count()</span> transactions!</h2>
+            </div>
+        </div>
     }
 </div>
