@@ -30,13 +30,32 @@ namespace Personal_Finance_Manager.Controllers
 
             if (isCategoryChosen)
             {
-                return View("ReportWithCategory", model);
+                return View("TableWithCategory", model);
             }
             else
             {
-                return View("ReportWithoutCategory", model);
+                return View("TableWithoutCategory", model);
             }
         }
+        public IActionResult DayByDay(ReportViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                bool isCategoryChosen = !string.IsNullOrEmpty(model.Category);
 
+                if (isCategoryChosen)
+                {
+                    return View("GraphWithCategory", model);
+                }
+                else
+                {
+                    return View("GraphWithoutCategory", model);
+                }
+            }
+            else
+            {
+                return View("Reports");
+            }
+        }
     }
 }

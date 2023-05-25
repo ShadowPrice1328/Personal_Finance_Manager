@@ -13,12 +13,12 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="firstDate" class="control-label">From</label>
-                <input asp-for="firstDate" type="date" max="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control"/>
+                <input asp-for="firstDate" type="date" max="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" required/>
                 <span asp-validation-for="firstDate" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="lastDate" class="control-label">To</label>
-                <input asp-for="lastDate" type="date" max="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" />
+                <input asp-for="lastDate" type="date" max="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" required/>
                 <span asp-validation-for="lastDate" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -28,9 +28,9 @@
                         <option value="Expense" selected>Expense</option>
                         <option value="Revenue">Revenue</option>
                     </select>
+                    <span asp-validation-for="Type" class="text-danger"></span>
                     <span class="arrow-down">&#9660;</span>
                 </div>
-                <span asp-validation-for="Type" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Category" class="control-label text-muted">Category (optional)</label>
@@ -52,12 +52,12 @@
                         </select>
                     }
                     <span class="arrow-down">&#9660;</span>
+                    <span asp-validation-for="Category" class="text-danger"></span>
                 </div>
-                <span asp-validation-for="Category" class="text-danger"></span>
             </div>
             <div class="form-group mt-3">
                 <input type="submit" value="Generate" class="btn btn-primary" formaction="/Generate"/>
-                <input type="submit" value="Day-by-Day" class="btn btn-success" formaction="/Day-by-Day"/>
+                <input type="submit" value="Day-by-Day" class="btn btn-success" formaction="/DayByDay"/>
             </div>
         </form>
     </div>
