@@ -1,8 +1,64 @@
-﻿@{
+﻿@inject Personal_Finance_Manager.Models.AppDbContext _appDbContext
+@model ReportViewModel
+
+@{
     ViewData["Title"] = "Report Generator";
 }
 
-<div class="container-fluid">
-    <h2>Report Generator</h2>
-    <p>Here you can create a report for selected period.</p>
+<h1>Report Generator</h1>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Generate" autocomplete="off">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="firstDate" class="control-label">From</label>
+                <input asp-for="firstDate" type="date" max="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control"/>
+                <span asp-validation-for="firstDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="lastDate" class="control-label">To</label>
+                <input asp-for="lastDate" type="date" max="@DateTime.Now.ToString("yyyy-MM-dd")" class="form-control" />
+                <span asp-validation-for="lastDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Type" class="control-label"></label>
+                <div class="select-wrapper">
+                    <select asp-for="Type" class="form-control">
+                        <option value="Expense" selected>Expense</option>
+                        <option value="Revenue">Revenue</option>
+                    </select>
+                    <span class="arrow-down">&#9660;</span>
+                </div>
+                <span asp-validation-for="Type" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Category" class="control-label text-muted">Category (optional)</label>
+                <div class="select-wrapper">
+                    @if (_appDbContext.Categories.Any())
+                    {
+                        <select class="form-control" name="Category" placeholder="Select Category">
+                            <option value="" selected></option>
+                            @foreach (var category in _appDbContext.Categories)
+                            {
+                                <option value="@category.Name">@category.Name</option>
+                            }
+                        </select>
+                    }
+                    else
+                    {
+                        <select class="form-control" disabled>
+                            <option value="">No categories available</option>
+                        </select>
+                    }
+                    <span class="arrow-down">&#9660;</span>
+                </div>
+                <span asp-validation-for="Category" class="text-danger"></span>
+            </div>
+            <div class="form-group mt-3">
+                <input type="submit" value="Generate" class="btn btn-primary" formaction="/Generate"/>
+                <input type="submit" value="Day-by-Day" class="btn btn-success" formaction="/Day-by-Day"/>
+            </div>
+        </form>
+    </div>
 </div>

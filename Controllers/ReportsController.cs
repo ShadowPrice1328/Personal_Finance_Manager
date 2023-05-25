@@ -24,5 +24,19 @@ namespace Personal_Finance_Manager.Controllers
         {
             return View();
         }
+        public IActionResult Generate(ReportViewModel model)
+        {
+            bool isCategoryChosen = !string.IsNullOrEmpty(model.Category);
+
+            if (isCategoryChosen)
+            {
+                return View("ReportWithCategory", model);
+            }
+            else
+            {
+                return View("ReportWithoutCategory", model);
+            }
+        }
+
     }
 }
