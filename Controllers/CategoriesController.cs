@@ -85,10 +85,24 @@ namespace Personal_Finance_Manager.Controllers
         public ActionResult Edit(Category model)
         {
             var data = _appDbContext.Categories.FirstOrDefault(x => x.Id == model.Id);
+
             if (data != null)
             {
+                var relatedTransactions = _appDbContext.Transactions
+                .Where(t => t.Category == data.Name)
+                .ToList();
+
                 data.Name = model.Name;
                 data.Description = model.Description;
+
+                if (relatedTransactions != null)
+                {
+                    foreach (var transaction in relatedTransactions)
+                    {
+                        transaction.Category = model.Name;
+                    }
+                }
+
                 _appDbContext.SaveChanges();
             }
 
