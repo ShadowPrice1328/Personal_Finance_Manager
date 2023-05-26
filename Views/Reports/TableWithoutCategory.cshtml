@@ -1,36 +1,13 @@
-﻿@inject Personal_Finance_Manager.Models.AppDbContext _appDbContext
-@model ReportViewModel
+﻿@model ReportWithoutCategoryViewModel
 
 @{
     ViewData["Title"] = "Report";
-
-    var allTransactions = _appDbContext.Transactions
-    .Where(t => t.Date >= Model.firstDate &&
-                t.Date <= Model.lastDate &&
-                t.Type == Model.Type)
-    .ToList();
-
-    // Categories from the list of Transactions
-    var categories = allTransactions.Select(t => t.Category).Distinct().ToList();
-
-    // Category - Cost dictionary
-    var categoryCosts = new Dictionary<string, decimal>();
-
-    foreach (var category in categories)
-    {
-        decimal cost = allTransactions
-        .Where(t => t.Category == category)
-        .Sum(t => t.Cost);
-
-        categoryCosts.Add(category, cost);
-    }
-
-    decimal allCost = allTransactions.Sum(t => t.Cost);
 }
 
-<h2>Report from @Model.firstDate.ToString("yyyy-MM-dd") to @Model.lastDate.ToString("yyyy-MM-dd") 
-    <br>[@Model.Type]
-    </h2>
+<h2>
+    Report from @Model.FirstDate.ToString("yyyy-MM-dd") to @Model.LastDate.ToString("yyyy-MM-dd")
+    <br />[@Model.Type]
+</h2>
 <hr />
 
 <div class="container">
@@ -45,7 +22,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var category in categoryCosts)
+                        @foreach (var category in Model.CategoryCosts)
                         {
                             <tr>
                                 <td>@category.Key</td>
@@ -53,16 +30,14 @@
                             </tr>
                         }
                         <tr>
-                            <td colspan="4" class="bg-cost text-left"><b>Total Cost: @allCost</b></td>
+                            <td colspan="2" class="bg-cost text-left"><b>Total Cost: @Model.TotalCost</b></td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
         <div class="col-md-4 text-center">
-            <p>
-                Comparison with other categories during this time period
-            </p>
+            <p>Comparison with other categories during this time period</p>
             <div>
                 <canvas id="pieChart"></canvas>
             </div>
@@ -71,7 +46,7 @@
 </div>
 
 <script>
-    var categoryCosts = @Html.Raw(Json.Serialize(categoryCosts));
+    var categoryCosts = @Html.Raw(Json.Serialize(Model.CategoryCosts));
 
     var labels = Object.keys(categoryCosts);
     var values = Object.values(categoryCosts);
