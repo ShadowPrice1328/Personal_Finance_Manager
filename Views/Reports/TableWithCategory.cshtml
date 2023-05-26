@@ -1,8 +1,115 @@
-﻿@model ReportViewModel
+﻿@inject AppDbContext _appDbContext
+@model ReportViewModel
 
 @{
     ViewData["Title"] = "Report";
+
+    var allTransactions = _appDbContext.Transactions
+        .Where(t => t.Date >= Model.firstDate &&
+                    t.Date <= Model.lastDate &&
+                    t.Type == Model.Type)
+        .ToList();
+
+    // Categories from the list of Transactions
+    var categories = allTransactions.Select(t => t.Category).Distinct().ToList();
+
+    // Category - Cost dictionary
+    var categoryCosts = new Dictionary<string, decimal>();
+
+    foreach (var category in categories)
+    {
+        decimal cost = allTransactions
+        .Where(t => t.Category == category)
+        .Sum(t => t.Cost);
+
+        categoryCosts.Add(category, cost);
+    }
+
+    var selectedTransactions = _appDbContext.Transactions
+        .Where(t => t.Category == Model.Category &&
+                    t.Date >= Model.firstDate &&
+                    t.Date <= Model.lastDate &&
+                    t.Type == Model.Type)
+        .ToList();
+
+    decimal allCost = allTransactions.Sum(t => t.Cost);
+    decimal catCost = selectedTransactions.Sum(t => t.Cost);
 }
 
-<h2>Report in the "@Model.Category" category from @Model.firstDate.ToString("yyyy-MM-dd") to @Model.lastDate.ToString("yyyy-MM-dd")</h2>
+<h2>Report in the "@Model.Category" category from [@Model.firstDate.ToString("yyyy-MM-dd")] to [@Model.lastDate.ToString("yyyy-MM-dd")]</h2>
 <hr />
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="table-responsive rounded-1" style="width: 100%;">
+                <table class="table table-bordered table-hover" style="width: 75%;">
+                    <thead class="thead-light">
+                        <tr>
+                            <th class="bg-light">Description</th>
+                            <th class="bg-light">Type</th>
+                            <th class="bg-light">Date</th>
+                            <th class="bg-light">Cost</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var transaction in selectedTransactions)
+                        {
+                            <tr>
+                                <td>@transaction.Description</td>
+                                <td>@transaction.Type</td>
+                                <td>@transaction.Date.ToString("yyyy-MM-dd")</td>
+                                <td>@transaction.Cost</td>
+                            </tr>
+                        }
+                        <tr>
+                            <td colspan="4" class="bg-cost text-left"><b>Total Cost: @catCost</b></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-md-4 text-center">
+            <p>Comparison with other categories during this time period</p>
+            <div>
+                <canvas id="pieChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var categoryCosts = @Html.Raw(Json.Serialize(categoryCosts));
+
+    var labels = Object.keys(categoryCosts);
+    var values = Object.values(categoryCosts);
+
+    var colors = ['#1abc9c', '#2ecc71', '#3498db', '#9b59b6', '#34495e', '#16a085', '#27ae60', '#2980b9', '#8e44ad', '#2c3e50'];
+
+    var backgroundColors = [];
+    var borderColors = [];
+
+    for (var i = 0; i < labels.length; i++) {
+        var colorIndex = i % colors.length;
+        backgroundColors.push(colors[colorIndex]);
+        borderColors.push(colors[colorIndex]);
+    }
+
+    var ctx = document.getElementById('pieChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: labels,
+            datasets: [{
+                data: values,
+                backgroundColor: backgroundColors,
+                borderColor: borderColors,
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false
+        }
+    });
+</script>
