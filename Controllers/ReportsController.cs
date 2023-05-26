@@ -30,53 +30,81 @@ namespace Personal_Finance_Manager.Controllers
         {
             return View();
         }
+        [HttpPost]
+        public IActionResult DayByDay(ReportViewModel model)
+        {
+            List<Transaction> allTransactions = GetTransactions(model);
+
+            if (!string.IsNullOrEmpty(model.Category))
+            {
+                ReportWithCategoryViewModel viewModel = CreateReportWithCategoryViewModel(model, allTransactions);
+                return View("GraphWithCategory", viewModel);
+            }
+            else
+            {
+                ReportWithoutCategoryViewModel viewModel = CreateReportWithoutCategoryViewModel(model, allTransactions);
+                return View("GraphWithoutCategory", viewModel);
+            }
+        }
 
         [HttpPost]
         public IActionResult Generate(ReportViewModel model)
         {
-            bool isCategoryChosen = !string.IsNullOrEmpty(model.Category);
             List<Transaction> allTransactions = GetTransactions(model);
 
-            if (isCategoryChosen)
+            if (!string.IsNullOrEmpty(model.Category))
             {
-                List<Transaction> selectedTransactions = allTransactions
-                    .Where(t => t.Category == model.Category)
-                    .ToList();
-
-                decimal catCost = selectedTransactions.Sum(t => t.Cost);
-                var categoryCosts = CalculateCategoryCosts(allTransactions);
-
-                var viewModel = new ReportWithCategoryViewModel
-                {
-                    Category = model.Category,
-                    FirstDate = model.firstDate,
-                    LastDate = model.lastDate,
-                    Type = model.Type,
-                    SelectedTransactions = selectedTransactions,
-                    CategoryCosts = categoryCosts,
-                    CategoryTotalCost = catCost
-                };
-
+                ReportWithCategoryViewModel viewModel = CreateReportWithCategoryViewModel(model, allTransactions);
                 return View("TableWithCategory", viewModel);
             }
             else
             {
-                decimal allCost = allTransactions.Sum(t => t.Cost);
-                var categoryCosts = CalculateCategoryCosts(allTransactions);
-
-                var viewModel = new ReportWithoutCategoryViewModel
-                {
-                    FirstDate = model.firstDate,
-                    LastDate = model.lastDate,
-                    Type = model.Type,
-                    AllTransactions = allTransactions,
-                    CategoryCosts = categoryCosts,
-                    TotalCost = allCost
-                };
-
+                ReportWithoutCategoryViewModel viewModel = CreateReportWithoutCategoryViewModel(model, allTransactions);
                 return View("TableWithoutCategory", viewModel);
             }
         }
+
+        private ReportWithoutCategoryViewModel CreateReportWithoutCategoryViewModel(ReportViewModel model, List<Transaction> allTransactions)
+        {
+            decimal allCost = allTransactions.Sum(t => t.Cost);
+            var categoryCosts = CalculateCategoryCosts(allTransactions);
+
+            var viewModel = new ReportWithoutCategoryViewModel
+            {
+                FirstDate = model.firstDate,
+                LastDate = model.lastDate,
+                Type = model.Type,
+                AllTransactions = allTransactions,
+                CategoryCosts = categoryCosts,
+                TotalCost = allCost
+            };
+
+            return viewModel;
+        }
+
+        private ReportWithCategoryViewModel CreateReportWithCategoryViewModel(ReportViewModel model, List<Transaction> allTransactions)
+        {
+            List<Transaction> selectedTransactions = allTransactions
+                .Where(t => t.Category == model.Category)
+                .ToList();
+
+            decimal catCost = selectedTransactions.Sum(t => t.Cost);
+            var categoryCosts = CalculateCategoryCosts(allTransactions);
+
+            var viewModel = new ReportWithCategoryViewModel
+            {
+                Category = model.Category,
+                FirstDate = model.firstDate,
+                LastDate = model.lastDate,
+                Type = model.Type,
+                SelectedTransactions = selectedTransactions,
+                CategoryCosts = categoryCosts,
+                CategoryTotalCost = catCost
+            };
+
+            return viewModel;
+        }
+
 
         private List<Transaction> GetTransactions(ReportViewModel model)
         {

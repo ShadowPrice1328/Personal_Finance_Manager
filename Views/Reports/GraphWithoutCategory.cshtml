@@ -1,0 +1,11 @@
+﻿@model ReportWithoutCategoryViewModel
+
+@{
+    ViewData["Title"] = "Day-by-Day Report";
+}
+
+<h2>
+    Day-by-Day Report from @Model.FirstDate.ToString("yyyy-MM-dd") to @Model.LastDate.ToString("yyyy-MM-dd")
+    <br />[@Model.Type]
+</h2>
+<hr />
