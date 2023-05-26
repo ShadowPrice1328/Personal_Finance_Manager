@@ -28,7 +28,12 @@ namespace Personal_Finance_Manager.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            var viewModel = new ReportViewModel
+            {
+                Transactions = _appDbContext.Transactions.ToList(),
+                Categories = _appDbContext.Categories.ToList()
+            };
+            return View(viewModel);
         }
         [HttpPost]
         public IActionResult DayByDay(ReportViewModel model)
@@ -71,8 +76,8 @@ namespace Personal_Finance_Manager.Controllers
 
             var viewModel = new ReportWithoutCategoryViewModel
             {
-                FirstDate = model.firstDate,
-                LastDate = model.lastDate,
+                FirstDate = (DateTime)model.FirstDate,
+                LastDate = model.LastDate,
                 Type = model.Type,
                 AllTransactions = allTransactions,
                 CategoryCosts = categoryCosts,
@@ -94,8 +99,8 @@ namespace Personal_Finance_Manager.Controllers
             var viewModel = new ReportWithCategoryViewModel
             {
                 Category = model.Category,
-                FirstDate = model.firstDate,
-                LastDate = model.lastDate,
+                FirstDate = (DateTime)model.FirstDate,
+                LastDate = model.LastDate,
                 Type = model.Type,
                 SelectedTransactions = selectedTransactions,
                 CategoryCosts = categoryCosts,
@@ -109,8 +114,8 @@ namespace Personal_Finance_Manager.Controllers
         private List<Transaction> GetTransactions(ReportViewModel model)
         {
             return _appDbContext.Transactions
-                .Where(t => t.Date >= model.firstDate &&
-                            t.Date <= model.lastDate &&
+                .Where(t => t.Date >= model.FirstDate &&
+                            t.Date <= model.LastDate &&
                             t.Type == model.Type)
                 .ToList();
         }
