@@ -1,5 +1,4 @@
-﻿@inject Personal_Finance_Manager.Models.AppDbContext _appDbContext
-@model Personal_Finance_Manager.Models.Transaction
+﻿@model TransactionViewModel
 
 @{
     ViewData["Title"] = "Add Transaction";
@@ -14,10 +13,10 @@
             <div class="form-group">
                 <label asp-for="Category" class="control-label"></label>
                 <div class="select-wrapper">
-                    @if (_appDbContext.Categories.Any())
+                    @if (Model.Categories.Any())
                     {
                         <select asp-for="Category" class="form-control">
-                            @foreach (var category in _appDbContext.Categories.ToList())
+                            @foreach (var category in Model.Categories.ToList())
                             {
                                 <option value="@category.Name">@category.Name</option>
                             }

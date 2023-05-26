@@ -24,44 +24,71 @@ namespace Personal_Finance_Manager.Controllers
 
         public IActionResult Index()
         {
-            var allTransactions = _appDbContext.Transactions.ToList();
-            return View(allTransactions);
+            var viewModel = new TransactionViewModel
+            {
+                Transactions = _appDbContext.Transactions.ToList(),
+                Categories = _appDbContext.Categories.ToList()
+            };
+            return View(viewModel);
         }
 
         [HttpGet]
         public IActionResult Create()
         {
-            var allCategories = _appDbContext.Categories.ToList();
-
-            if (allCategories != null)
+            var viewModel = new TransactionViewModel
             {
-                ViewData["Categories"] = allCategories;
-                return View(new Transaction());
-            }
-            return View();
+                Transactions = _appDbContext.Transactions.ToList(),
+                Categories = _appDbContext.Categories.ToList()
+            };
+
+            return View(viewModel);
         }
 
         [HttpPost]
-        public IActionResult Create(Transaction model)
+        public IActionResult Create(TransactionViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
-                _appDbContext.Transactions.Add(model);
+                var transaction = new Transaction
+                {
+                    Category = viewModel.Category,
+                    Type = viewModel.Type,
+                    Cost = viewModel.Cost,
+                    Date = viewModel.Date,
+                    Description = viewModel.Description
+                };
+
+                _appDbContext.Transactions.Add(transaction);
                 _appDbContext.SaveChanges();
 
                 return RedirectToAction("Index");
             }
-            return View(model);
+
+            viewModel.Categories = _appDbContext.Categories.ToList();
+            return View(viewModel);
         }
+
         [HttpGet]
         public ActionResult Edit(int Id)
         {
             var data = _appDbContext.Transactions.FirstOrDefault(x => x.Id == Id);
-            return View(data);
+
+            var viewModel = new TransactionViewModel
+            {
+                Id = data.Id,
+                Type = data.Type,
+                Cost = data.Cost,
+                Date = data.Date,
+                Description = data.Description,
+                Transactions = _appDbContext.Transactions.ToList(),
+                Categories = _appDbContext.Categories.ToList()
+            };
+
+            return View(viewModel);
         }
 
         [HttpPost]
-        public IActionResult Edit(Transaction model)
+        public IActionResult Edit(TransactionViewModel model)
         {
             var data = _appDbContext.Transactions.Where(x => x.Id == model.Id).FirstOrDefault();
             if (data != null)
@@ -102,11 +129,14 @@ namespace Personal_Finance_Manager.Controllers
                 return RedirectToAction("Index");
             }
 
-            var filteredTransactions = _appDbContext.Transactions
-                .Where(t => t.Category == tCategory)
-                .ToList();
+            var viewModel = new TransactionViewModel
+            {
+                Transactions = _appDbContext.Transactions.Where(t => t.Category == tCategory).ToList(),
+                Categories = _appDbContext.Categories.ToList()
+            };
 
-            return View("Index", filteredTransactions);
+            return View("Index", viewModel);
         }
+
     }
 }

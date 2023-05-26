@@ -1,11 +1,10 @@
-﻿@inject Personal_Finance_Manager.Models.AppDbContext _appDbContext
-@model IEnumerable<Personal_Finance_Manager.Models.Transaction>
+﻿@model TransactionViewModel
 
 @{
     ViewData["Title"] = "Transactions";
 
-    var transactionCategories = _appDbContext.Transactions.Select(t => t.Category).ToList();
-    var categoryNames = _appDbContext.Categories.Select(c => c.Name).ToList();
+    var transactionCategories = Model.Transactions.Select(t => t.Category).ToList();
+    var categoryNames = Model.Categories.Select(c => c.Name).ToList();
     var everyCategory = categoryNames.Concat(transactionCategories).Distinct().ToList();
 }
 
@@ -64,7 +63,7 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var item in Model.Transactions) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Category)
