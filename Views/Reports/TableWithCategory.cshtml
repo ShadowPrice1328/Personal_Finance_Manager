@@ -36,7 +36,9 @@
     decimal catCost = selectedTransactions.Sum(t => t.Cost);
 }
 
-<h2>Report in the "@Model.Category" category from [@Model.firstDate.ToString("yyyy-MM-dd")] to [@Model.lastDate.ToString("yyyy-MM-dd")]</h2>
+<h2>Report in the "@Model.Category" category from [@Model.firstDate.ToString("yyyy-MM-dd")] to [@Model.lastDate.ToString("yyyy-MM-dd")]
+    <br>[@Model.Type]
+</h2>
 <hr />
 
 <div class="container">
@@ -47,7 +49,6 @@
                     <thead class="thead-light">
                         <tr>
                             <th class="bg-light">Description</th>
-                            <th class="bg-light">Type</th>
                             <th class="bg-light">Date</th>
                             <th class="bg-light">Cost</th>
                         </tr>
@@ -57,7 +58,6 @@
                         {
                             <tr>
                                 <td>@transaction.Description</td>
-                                <td>@transaction.Type</td>
                                 <td>@transaction.Date.ToString("yyyy-MM-dd")</td>
                                 <td>@transaction.Cost</td>
                             </tr>
@@ -70,7 +70,9 @@
             </div>
         </div>
         <div class="col-md-4 text-center">
-            <p>Comparison with other categories during this time period</p>
+            <p>
+                Comparison with other categories during this time period
+            </p>
             <div>
                 <canvas id="pieChart"></canvas>
             </div>
