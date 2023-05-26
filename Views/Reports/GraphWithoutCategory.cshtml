@@ -9,3 +9,73 @@
     <br />[@Model.Type]
 </h2>
 <hr />
+<div>
+    <canvas id="linearChart"></canvas>
+</div>
+
+@section scripts
+{
+    <script>
+        var categoryCosts = @Html.Raw(Json.Serialize(Model.CategoryCosts));
+        var labels = Object.keys(categoryCosts);
+        var values = Object.values(categoryCosts);
+
+        var dates = @Html.Raw(Json.Serialize(Model.AllTransactions.Select(t => t.Date.ToString("yyyy-MM-ddTHH:mm:ss")).ToList()));
+
+        var firstDate = new Date('@Model.FirstDate.ToString("yyyy-MM-dd")');
+        var lastDate = new Date('@Model.LastDate.ToString("yyyy-MM-dd")');
+
+
+        var ctx = document.getElementById('linearChart').getContext('2d');
+        var chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Cost',
+                    data: values,
+                    borderColor: 'blue',
+                    backgroundColor: 'transparent'
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        display: true,
+                        title: {
+                            display: true,
+                            text: 'Date'
+                        },
+                        ticks: {
+                            callback: function (value, index, values) {
+                                var dateIndex = Math.floor(value);
+                                var date = new Date(dates[dateIndex]);
+                                var formattedDate = date.toLocaleDateString();
+                                return formattedDate;
+                            }
+                        }
+                    },
+                    y: {
+                        display: true,
+                        title: {
+                            display: true,
+                            text: 'Cost'
+                        }
+                    }
+                },
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function (context) {
+                                var label = labels[context.dataIndex];
+                                var cost = context.parsed.y;
+                                return label + ': ' + cost;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+}

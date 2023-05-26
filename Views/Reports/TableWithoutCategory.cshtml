@@ -45,38 +45,40 @@
     </div>
 </div>
 
-<script>
-    var categoryCosts = @Html.Raw(Json.Serialize(Model.CategoryCosts));
+@section scripts {
+    <script>
+        var categoryCosts = @Html.Raw(Json.Serialize(Model.CategoryCosts));
 
-    var labels = Object.keys(categoryCosts);
-    var values = Object.values(categoryCosts);
+        var labels = Object.keys(categoryCosts);
+        var values = Object.values(categoryCosts);
 
-    var colors = ['#1abc9c', '#2ecc71', '#3498db', '#9b59b6', '#34495e', '#16a085', '#27ae60', '#2980b9', '#8e44ad', '#2c3e50'];
+        var colors = ['#1abc9c', '#2ecc71', '#3498db', '#9b59b6', '#34495e', '#16a085', '#27ae60', '#2980b9', '#8e44ad', '#2c3e50'];
 
-    var backgroundColors = [];
-    var borderColors = [];
+        var backgroundColors = [];
+        var borderColors = [];
 
-    for (var i = 0; i < labels.length; i++) {
-        var colorIndex = i % colors.length;
-        backgroundColors.push(colors[colorIndex]);
-        borderColors.push(colors[colorIndex]);
-    }
-
-    var ctx = document.getElementById('pieChart').getContext('2d');
-    var myChart = new Chart(ctx, {
-        type: 'pie',
-        data: {
-            labels: labels,
-            datasets: [{
-                data: values,
-                backgroundColor: backgroundColors,
-                borderColor: borderColors,
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false
+        for (var i = 0; i < labels.length; i++) {
+            var colorIndex = i % colors.length;
+            backgroundColors.push(colors[colorIndex]);
+            borderColors.push(colors[colorIndex]);
         }
-    });
-</script>
+
+        var ctx = document.getElementById('pieChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: values,
+                    backgroundColor: backgroundColors,
+                    borderColor: borderColors,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+    </script>
+}

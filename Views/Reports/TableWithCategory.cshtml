@@ -47,7 +47,8 @@
     </div>
 </div>
 
-<script>
+@section scripts {
+    <script>
     var categoryCosts = @Html.Raw(Json.Serialize(Model.CategoryCosts));
 
     var labels = Object.keys(categoryCosts);
@@ -82,3 +83,4 @@
         }
     });
 </script>
+}
