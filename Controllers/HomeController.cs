@@ -19,6 +19,7 @@ namespace Personal_Finance_Manager.Controllers
 
         public IActionResult Index()
         {
+            // Checking Database connections
             try
             {
                 using (_appDbContext.Database.GetDbConnection())
@@ -27,6 +28,7 @@ namespace Personal_Finance_Manager.Controllers
                     var isConnected = _appDbContext.Database.CanConnect();
                     _appDbContext.Database.CloseConnection();
 
+                    // Showing a message about connection status
                     if (isConnected)
                     {
                         ViewBag.ConnectionStatus = $"Connected to [{_appDbContext.Database.GetDbConnection().Database}] database!";
