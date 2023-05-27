@@ -13,6 +13,7 @@ namespace Personal_Finance_Manager.Controllers
             _appDbContext = appDbContext;
         }
 
+        // Returning to Index if problem with connection
         public override void OnActionExecuting(ActionExecutingContext context)
         {
             if (!_appDbContext.Database.CanConnect())
@@ -76,6 +77,7 @@ namespace Personal_Finance_Manager.Controllers
         [HttpGet]
         public ActionResult Edit(int Id)
         {
+            // Selecting needed category and transfering to POST
             var data = _appDbContext.Categories.FirstOrDefault(x => x.Id == Id);
             return View(data);
         }
@@ -83,21 +85,27 @@ namespace Personal_Finance_Manager.Controllers
         [HttpPost]
         public ActionResult Edit(Category model)
         {
+            // Selecting needed category
             var data = _appDbContext.Categories.FirstOrDefault(x => x.Id == model.Id);
 
+            // If exists in Database:
             if (data != null)
             {
+                // Looking for transaction with this Category
                 var relatedTransactions = _appDbContext.Transactions
                 .Where(t => t.Category == data.Name)
                 .ToList();
 
+                // Editing values
                 data.Name = model.Name;
                 data.Description = model.Description;
 
+                // If transactions exist:
                 if (relatedTransactions != null)
                 {
                     foreach (var transaction in relatedTransactions)
                     {
+                        // Change their category
                         transaction.Category = model.Name;
                     }
                 }
@@ -110,6 +118,7 @@ namespace Personal_Finance_Manager.Controllers
 
         public ActionResult Details(int Id)
         {
+            // Selecting needed category
             var data = _appDbContext.Categories.FirstOrDefault(x => x.Id == Id);
             return View(data);
         }
@@ -117,6 +126,7 @@ namespace Personal_Finance_Manager.Controllers
         [HttpGet]
         public ActionResult Delete(int Id)
         {
+            // Selecting needed category and transfering to POST
             var model = _appDbContext.Categories.FirstOrDefault(x => x.Id == Id);
             return View(model);
         }
@@ -124,6 +134,7 @@ namespace Personal_Finance_Manager.Controllers
         [HttpPost]
         public ActionResult Delete(Category model)
         {
+            // Removing selected in [HttpGet] category
             _appDbContext.Categories.Remove(model);
             _appDbContext.SaveChanges();
 

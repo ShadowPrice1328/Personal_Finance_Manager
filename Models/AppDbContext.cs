@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace Personal_Finance_Manager.Models
 {
@@ -10,10 +8,10 @@ namespace Personal_Finance_Manager.Models
         {
             try
             {
-                Database.EnsureCreated();
                 // Ensure the database is created
+                Database.EnsureCreated();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return;
             }
