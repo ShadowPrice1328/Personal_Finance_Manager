@@ -14,69 +14,35 @@
 </div>
 
 @section scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        // Отримайте дані з моделі у змінні JavaScript
-        var firstDate = new Date('@Model.FirstDate.ToString("yyyy-MM-dd")');
-        var lastDate = new Date('@Model.LastDate.ToString("yyyy-MM-dd")');
-        var categoryCosts = @Html.Raw(Json.Serialize(Model.CategoryCosts));
-        console.log("categoryCosts: ", categoryCosts);
+        var transactions = @Html.Raw(Json.Serialize(Model.AllTransactions));
 
-        // Створіть масив дат від firstDate до lastDate
-        var dates = [];
-        var currentDate = new Date(firstDate);
-        while (currentDate <= lastDate) {
-            dates.push(new Date(currentDate));
-            currentDate.setDate(currentDate.getDate() + 1);
-        }
+        var dates = transactions.map(t => t.date);
+        var costs = transactions.map(t => t.cost);
 
-        // Функція для форматування дати у відповідний формат
-        function formatDate(date) {
-            var year = date.getFullYear();
-            var month = (date.getMonth() + 1).toString().padStart(2, '0');
-            var day = date.getDate().toString().padStart(2, '0');
-            return `${year}-${month}-${day}`;
-        }
-
-        // Створіть об'єкт для зберігання даних категорій
-        var datasets = [];
-
-        // Проходьте по кожній категорії
-        Object.keys(categoryCosts).forEach(function (category) {
-            // Створіть масив витрат для поточної категорії
-            var categoryData = dates.map(function (date) {
-                var dateString = formatDate(date);
-                console.log(dateString);
-
-                var cost = categoryCosts[category];
-                console.log(cost);
-                return cost;
-            });
-            console.log("categoryData: ", categoryData);
-
-            // Додайте дані для поточної категорії у масив даних категорій
-            datasets.push({
-                label: category,
-                data: categoryData,
-                borderColor: 'rgba(75, 192, 192, 1)',
-                backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                fill: true
-            });
-        });
-
-        // Створіть контекст для малювання діаграми
         var ctx = document.getElementById('lineChart').getContext('2d');
-
-        // Створіть лінійну діаграму з витратами
-        new Chart(ctx, {
+        var chart = new Chart(ctx, {
             type: 'line',
             data: {
-                labels: dates.map(function (date) {
-                    return formatDate(date);
-                }),
-                datasets: datasets
+                labels: dates,
+                datasets: [{
+                    label: 'Expenses',
+                    data: costs,
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    pointBackgroundColor: 'rgba(75, 192, 192, 1)',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: 'rgba(75, 192, 192, 1)',
+                }]
             },
             options: {
                 responsive: true,
+                title: {
+                    display: true,
+                    text: 'Day-by-Day Expenses'
+                },
                 scales: {
                     x: {
                         display: true,
@@ -89,12 +55,11 @@
                         display: true,
                         title: {
                             display: true,
-                            text: 'Costs'
+                            text: 'Cost'
                         }
                     }
                 }
             }
         });
     </script>
-
 }

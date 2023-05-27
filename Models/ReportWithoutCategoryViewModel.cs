@@ -7,7 +7,6 @@
         public string Type { get; set; }
         public List<Transaction> AllTransactions { get; set; }
         public Dictionary<string, decimal> CategoryCosts { get; set; }
-
         public decimal TotalCost { get; set; }
     }
 }
