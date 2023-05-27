@@ -32,6 +32,7 @@ namespace Personal_Finance_Manager.Controllers
 
         public IActionResult Search(string cName)
         {
+            // If searchbox isn't empty then starts searching
             if (!string.IsNullOrEmpty(cName))
             {
                 cName = cName.Trim().ToLower();
@@ -51,6 +52,7 @@ namespace Personal_Finance_Manager.Controllers
                 }
             }
 
+            // If searchbox is empty -> updates the page
             return RedirectToAction("Index");
         }
 

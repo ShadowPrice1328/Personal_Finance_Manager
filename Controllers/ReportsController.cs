@@ -29,13 +29,12 @@ namespace Personal_Finance_Manager.Controllers
 
         public IActionResult Index()
         {
-            // Adding tables' data to model
+            // Transfering all tables to Index
             var viewModel = new ReportViewModel
             {
                 Transactions = _appDbContext.Transactions.ToList(),
                 Categories = _appDbContext.Categories.ToList()
             };
-            // Transfering tables to Index
             return View(viewModel);
         }
         [HttpPost]
