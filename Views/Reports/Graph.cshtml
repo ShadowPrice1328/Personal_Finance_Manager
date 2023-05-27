@@ -5,11 +5,10 @@
 }
 
 <h2>
-    Day-by-Day Report from @Model.FirstDate.ToString("yyyy-MM-dd") to @Model.LastDate.ToString("yyyy-MM-dd")
-    <br />[@Model.Type]
+    Day-by-day expenses from @Model.FirstDate.ToString("yyyy-MM-dd") to @Model.LastDate.ToString("yyyy-MM-dd")
 </h2>
 <hr />
-<div>
+<div class="chart-container row" style="max-height: 500px; min-height:500px">
     <canvas id="lineChart"></canvas>
 </div>
 
@@ -25,8 +24,7 @@
             return `${year}-${month}-${day}`;
         }
 
-        var dates = transactions.map(t => formatDate(new Date(t.date)));
-        dates.reverse();
+        var dates = transactions.map(t => formatDate(new Date(t.date))).reverse();
         var costs = transactions.map(t => t.cost);
 
         var ctx = document.getElementById('lineChart').getContext('2d');

@@ -40,16 +40,8 @@ namespace Personal_Finance_Manager.Controllers
         {
             List<Transaction> allTransactions = GetTransactions(model);
 
-            if (!string.IsNullOrEmpty(model.Category))
-            {
-                ReportWithCategoryViewModel viewModel = CreateReportWithCategoryViewModel(model, allTransactions);
-                return View("GraphWithCategory", viewModel);
-            }
-            else
-            {
-                ReportWithoutCategoryViewModel viewModel = CreateReportWithoutCategoryViewModel(model, allTransactions);
-                return View("GraphWithoutCategory", viewModel);
-            }
+            ReportWithoutCategoryViewModel viewModel = CreateReportWithoutCategoryViewModel(model, allTransactions);
+            return View("Graph", viewModel);
         }
 
         [HttpPost]
