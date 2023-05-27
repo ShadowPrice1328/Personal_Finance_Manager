@@ -19,6 +19,7 @@
         var firstDate = new Date('@Model.FirstDate.ToString("yyyy-MM-dd")');
         var lastDate = new Date('@Model.LastDate.ToString("yyyy-MM-dd")');
         var categoryCosts = @Html.Raw(Json.Serialize(Model.CategoryCosts));
+        console.log("categoryCosts: ", categoryCosts);
 
         // Створіть масив дат від firstDate до lastDate
         var dates = [];
@@ -36,21 +37,30 @@
             return `${year}-${month}-${day}`;
         }
 
-        // Створіть масив витрат для кожної категорії
-        var datasets = Object.keys(categoryCosts).map(function (category) {
+        // Створіть об'єкт для зберігання даних категорій
+        var datasets = [];
+
+        // Проходьте по кожній категорії
+        Object.keys(categoryCosts).forEach(function (category) {
+            // Створіть масив витрат для поточної категорії
             var categoryData = dates.map(function (date) {
                 var dateString = formatDate(date);
-                var cost = categoryCosts[dateString] && categoryCosts[dateString][category] ? categoryCosts[dateString][category] : 0;
+                console.log(dateString);
+
+                var cost = categoryCosts[category];
+                console.log(cost);
                 return cost;
             });
+            console.log("categoryData: ", categoryData);
 
-            return {
+            // Додайте дані для поточної категорії у масив даних категорій
+            datasets.push({
                 label: category,
                 data: categoryData,
                 borderColor: 'rgba(75, 192, 192, 1)',
                 backgroundColor: 'rgba(75, 192, 192, 0.2)',
                 fill: true
-            };
+            });
         });
 
         // Створіть контекст для малювання діаграми
@@ -86,4 +96,5 @@
             }
         });
     </script>
+
 }
