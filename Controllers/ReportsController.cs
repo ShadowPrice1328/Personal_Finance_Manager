@@ -87,6 +87,7 @@ namespace Personal_Finance_Manager.Controllers
             return viewModel;
         }
 
+
         private ReportWithCategoryViewModel CreateReportWithCategoryViewModel(ReportViewModel model, List<Transaction> allTransactions)
         {
             List<Transaction> selectedTransactions = allTransactions
@@ -109,8 +110,6 @@ namespace Personal_Finance_Manager.Controllers
 
             return viewModel;
         }
-
-
         private List<Transaction> GetTransactions(ReportViewModel model)
         {
             return _appDbContext.Transactions

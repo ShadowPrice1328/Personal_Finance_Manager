@@ -10,33 +10,60 @@
 </h2>
 <hr />
 <div>
-    <canvas id="linearChart"></canvas>
+    <canvas id="lineChart"></canvas>
 </div>
 
-@section scripts
-{
+@section scripts {
     <script>
-        var categoryCosts = @Html.Raw(Json.Serialize(Model.CategoryCosts));
-        var labels = Object.keys(categoryCosts);
-        var values = Object.values(categoryCosts);
-
-        var dates = @Html.Raw(Json.Serialize(Model.AllTransactions.Select(t => t.Date.ToString("yyyy-MM-ddTHH:mm:ss")).ToList()));
-
+        // Отримайте дані з моделі у змінні JavaScript
         var firstDate = new Date('@Model.FirstDate.ToString("yyyy-MM-dd")');
         var lastDate = new Date('@Model.LastDate.ToString("yyyy-MM-dd")');
+        var categoryCosts = @Html.Raw(Json.Serialize(Model.CategoryCosts));
 
+        // Створіть масив дат від firstDate до lastDate
+        var dates = [];
+        var currentDate = new Date(firstDate);
+        while (currentDate <= lastDate) {
+            dates.push(new Date(currentDate));
+            currentDate.setDate(currentDate.getDate() + 1);
+        }
 
-        var ctx = document.getElementById('linearChart').getContext('2d');
-        var chart = new Chart(ctx, {
+        // Функція для форматування дати у відповідний формат
+        function formatDate(date) {
+            var year = date.getFullYear();
+            var month = (date.getMonth() + 1).toString().padStart(2, '0');
+            var day = date.getDate().toString().padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        // Створіть масив витрат для кожної категорії
+        var datasets = Object.keys(categoryCosts).map(function (category) {
+            var categoryData = dates.map(function (date) {
+                var dateString = formatDate(date);
+                var cost = categoryCosts[dateString] && categoryCosts[dateString][category] ? categoryCosts[dateString][category] : 0;
+                return cost;
+            });
+
+            return {
+                label: category,
+                data: categoryData,
+                borderColor: 'rgba(75, 192, 192, 1)',
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                fill: true
+            };
+        });
+
+        // Створіть контекст для малювання діаграми
+        var ctx = document.getElementById('lineChart').getContext('2d');
+
+        // Створіть лінійну діаграму з витратами
+        new Chart(ctx, {
             type: 'line',
             data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Cost',
-                    data: values,
-                    borderColor: 'blue',
-                    backgroundColor: 'transparent'
-                }]
+                labels: dates.map(function (date) {
+                    return formatDate(date);
+                }),
+                datasets: datasets
             },
             options: {
                 responsive: true,
@@ -46,32 +73,13 @@
                         title: {
                             display: true,
                             text: 'Date'
-                        },
-                        ticks: {
-                            callback: function (value, index, values) {
-                                var dateIndex = Math.floor(value);
-                                var date = new Date(dates[dateIndex]);
-                                var formattedDate = date.toLocaleDateString();
-                                return formattedDate;
-                            }
                         }
                     },
                     y: {
                         display: true,
                         title: {
                             display: true,
-                            text: 'Cost'
-                        }
-                    }
-                },
-                plugins: {
-                    tooltip: {
-                        callbacks: {
-                            label: function (context) {
-                                var label = labels[context.dataIndex];
-                                var cost = context.parsed.y;
-                                return label + ': ' + cost;
-                            }
+                            text: 'Costs'
                         }
                     }
                 }
