@@ -1,12 +1,18 @@
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Personal_Finance_Manager.Models;
+using Personal_Finance_Manager.Services;
+using System.Text.Encodings.Web;
+using System.Text.Json;
+using System.Text.Unicode;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseMySQL("server=127.0.0.1;user=root;password=1111;database=pfm;"));
+    options.UseMySQL("server=127.0.0.1;user=root;password=16083105;database=pfm;"));
+builder.Services.AddScoped<JsonFileCategoriesService>();
 
 var app = builder.Build();
 
@@ -27,7 +33,19 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapControllerRoute(
+    name: "category",
+    pattern: "Categories/{id:int}",
+    defaults: new { controller = "Categories", action = "Details" });
+
+app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.MapGet("/api/categories", (
+    [FromServices] JsonFileCategoriesService service) =>
+    {
+        var json = service.GetCategories();
+        return Results.Text(json);
+    });
 
 app.Run();
