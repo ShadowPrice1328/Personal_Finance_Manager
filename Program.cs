@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Personal_Finance_Manager.Converters;
 using Personal_Finance_Manager.Models;
 using Personal_Finance_Manager.Services;
 using System.Text.Encodings.Web;
@@ -9,10 +10,17 @@ using System.Text.Unicode;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new JsonDateTimeConverter("yyyy-MM-dd"));
+        options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+        options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+    });
+
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySQL("server=127.0.0.1;user=root;password=16083105;database=pfm;"));
-builder.Services.AddScoped<JsonFileCategoriesService>();
+builder.Services.AddScoped<JsonService>();
 
 var app = builder.Build();
 
@@ -24,7 +32,6 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
@@ -33,19 +40,7 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapControllerRoute(
-    name: "category",
-    pattern: "Categories/{id:int}",
-    defaults: new { controller = "Categories", action = "Details" });
-
-app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-
-app.MapGet("/api/categories", (
-    [FromServices] JsonFileCategoriesService service) =>
-    {
-        var json = service.GetCategories();
-        return Results.Text(json);
-    });
 
 app.Run();
