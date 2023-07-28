@@ -1,16 +1,19 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Personal_Finance_Manager.Models;
+using Personal_Finance_Manager.Services;
 
 namespace Personal_Finance_Manager.Controllers
 {
     public class CategoriesController : Controller
     {
         private readonly AppDbContext _appDbContext;
+        private readonly JsonService _jsonService;
 
-        public CategoriesController(AppDbContext appDbContext)
+        public CategoriesController(AppDbContext appDbContext, JsonService jsonService)
         {
             _appDbContext = appDbContext;
+            _jsonService = jsonService;
         }
 
         // Returning to Index if problem with connection
