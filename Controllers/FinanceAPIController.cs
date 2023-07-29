@@ -9,25 +9,32 @@ namespace Personal_Finance_Manager.Controllers
     [ApiController]
     public class FinanceAPIController : ControllerBase
     {
-        public FinanceAPIController(JsonService jsonService) 
+        public FinanceAPIController(FinanceService FinanceService) 
         {
-            JsonService = jsonService;
+            this.FinanceService = FinanceService;
         }
 
-        public JsonService JsonService { get; }
+        public FinanceService FinanceService { get; }
 
         [Route("categories")]
         [HttpGet]
         public IEnumerable<Category> GetCategories()
         {
-            return JsonService.GetCategories();
+            return FinanceService.GetCategories();
+        }
+
+        [Route("categories/{Name}")]
+        [HttpGet]
+        public Category GetCategory([FromRoute] string Name)
+        {
+            return FinanceService.GetCategory(Name);
         }
 
         [Route("transactions")]
         [HttpGet]
         public IEnumerable<Transaction> GetTransactions()
         {
-            return JsonService.GetTransactions();
+            return FinanceService.GetTransactions();
         }
     }
 }

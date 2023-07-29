@@ -6,10 +6,10 @@ using System.Text.Unicode;
 
 namespace Personal_Finance_Manager.Services
 {
-    public class JsonService
+    public class FinanceService
     {
         private readonly AppDbContext _appDbContext;
-        public JsonService(AppDbContext appDbContext)
+        public FinanceService(AppDbContext appDbContext)
         {
             _appDbContext = appDbContext;
         }
@@ -34,6 +34,11 @@ namespace Personal_Finance_Manager.Services
         public IEnumerable<Transaction> GetTransactions()
         {
             return _appDbContext.Transactions.ToList();
+        }
+
+        public Category GetCategory(string Name)
+        {
+            return _appDbContext.Categories.FirstOrDefault(x => x.Name == Name);
         }
     }
 }

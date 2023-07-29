@@ -20,7 +20,7 @@ builder.Services.AddControllersWithViews()
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseMySQL("server=127.0.0.1;user=root;password=16083105;database=pfm;"));
-builder.Services.AddScoped<JsonService>();
+builder.Services.AddScoped<FinanceService>();
 
 var app = builder.Build();
 

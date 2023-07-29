@@ -17,14 +17,14 @@
     {
         <div class="row justify-content-center mt-4">
             <div class="col-md-8">
-                <h2 class="mb-4">Your database contains info about <span class="text-primary">@Model.Categories.Count()</span> categories:</h2>
+                <h2 class="mb-4">You have <span class="text-primary">@Model.Categories.Count()</span> categories:</h2>
 
                 @foreach (var category in Model.Categories.ToList())
                 {
                     <p class="mb-1" style="font-size: 18px;">@category.Name</p>
                 }
 
-                <h2 class="mt-4">And <span class="text-primary">@Model.Transactions.Count()</span> transactions!</h2>
+                <h2 class="mt-4">Number of transactions: <span class="text-primary">@Model.Transactions.Count()</span></h2>
             </div>
         </div>
     }
