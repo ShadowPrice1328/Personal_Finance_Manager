@@ -28,3 +28,4 @@ _**It is not necessary to create tables!**_
 ``` cs
 options.UseMySQL("server=127.0.0.1;user=root;password=1111;database=pfm;"));
 ```
+[![Stand With Ukraine](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/banner-personal-page.svg)](https://stand-with-ukraine.pp.ua)
